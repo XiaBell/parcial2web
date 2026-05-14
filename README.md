@@ -1,10 +1,4 @@
-# Preparcial 2 — Sistema de Usuarios y Roles
-
-API en NestJS con autenticación JWT, autorización por roles y persistencia en PostgreSQL.
-
-## Requisitos
-- Node.js 18+
-- PostgreSQL
+# Parcial 2
 
 ## Instalación
 ```bash
