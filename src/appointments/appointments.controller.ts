@@ -44,6 +44,4 @@ export class AppointmentsController {
   deleteAppointment(@Param('id') id: string, @Req() req) {
     return this.appointmentsService.deleteAppointment(id, req.user.userId);
   }
-
-
 }

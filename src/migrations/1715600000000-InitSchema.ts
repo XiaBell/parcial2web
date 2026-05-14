@@ -39,11 +39,38 @@ export class InitSchema1715600000000 implements MigrationInterface {
           FOREIGN KEY ("role_id") REFERENCES "roles"("id") ON DELETE CASCADE
       );
     `);
+
+    await queryRunner.query(`
+      CREATE TABLE "appointments" (
+        "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+        "datetime" TIMESTAMP NOT NULL,
+        "status" varchar NOT NULL,
+        "created_at" TIMESTAMP NOT NULL DEFAULT now(),
+        "user_id" uuid NOT NULL,
+        CONSTRAINT "FK_appointments_user"
+          FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE
+      );
+    `);
+
+    await queryRunner.query(`
+      CREATE TABLE "users_appointments" (
+        "user_id" uuid NOT NULL,
+        "appointment_id" uuid NOT NULL,
+        CONSTRAINT "PK_users_appointments" PRIMARY KEY ("user_id", "appointment_id"),
+        CONSTRAINT "FK_users_appointments_user"
+          FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
+        CONSTRAINT "FK_users_appointments_appointment"
+          FOREIGN KEY ("appointment_id") REFERENCES "appointments"("id") ON DELETE CASCADE
+      );
+    `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP TABLE "users_roles";`);
     await queryRunner.query(`DROP TABLE "users";`);
     await queryRunner.query(`DROP TABLE "roles";`);
+    await queryRunner.query(`DROP TABLE "appointments";`);
+    await queryRunner.query(`DROP TABLE "users_appointments";`);
   }
+  
 }
